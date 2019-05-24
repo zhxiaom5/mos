@@ -5,7 +5,7 @@ import (
 	"log"
 	"mos/src/glo"
 
-	"mos/src/server/route/ticket"
+	// "mos/src/server/route/ticket"
 
 	"github.com/jinzhu/gorm"
 )
@@ -13,12 +13,11 @@ import (
 // User 用户表结构体
 type User struct {
 	// ID       int    `gorm:"type:int(10);primary_key;column:id;AUTO_INCREMENT;"`
-	UserName     string `gorm:"type:varchar(32);unique;not null;column:username"`
-	NickName     string `gorm:"type:varchar(32);unique;not null;column:nick_name"`
-	Password     string `gorm:"type:varchar(64);column:password"`
-	Email        string `gorm:"type:varchar(64);column:email"`
-	Phone        string `gorm:"type:varchar(16);column:phone"`
-	Tickets      []ticket.Ticket
+	UserName     string        `gorm:"type:varchar(32);unique;not null;column:username"`
+	NickName     string        `gorm:"type:varchar(32);unique;not null;column:nick_name"`
+	Password     string        `gorm:"type:varchar(64);column:password"`
+	Email        string        `gorm:"type:varchar(64);column:email"`
+	Phone        string        `gorm:"type:varchar(16);column:phone"`
 	SystemGroups []SystemGroup `gorm:"many2many:user_group"`
 	gorm.Model
 }

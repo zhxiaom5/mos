@@ -206,3 +206,13 @@ export function ctlTicket(id, ctl, user, content) {
   })
 }
 
+
+// 工单信息
+export function getTicketLineData() {
+  return request({
+    url: '/ticket/GetTicketData',
+    method: 'post',
+    data: {}
+  })
+}
+

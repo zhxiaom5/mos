@@ -47,5 +47,7 @@ func InitRoute(engine *gin.Engine) {
 
 		ticketAPI.POST("/TicketSend", TicketSend)
 
+		ticketAPI.POST("/GetTicketData", GetTicketData)
+
 	}
 }

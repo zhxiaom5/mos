@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// JenkinsPost jenkins 构建数据上报
 func JenkinsPost(ctx *gin.Context) {
 	var (
 		req JobPost

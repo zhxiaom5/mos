@@ -73,3 +73,56 @@ func DecryptToken(token string, key string) (srcStr string) {
 	srcStr = strings.Split(string(encStr), "_")[0]
 	return
 }
+
+// GetDayByTimeStampRange 获取时间戳之间的日期
+func GetDayByTimeStampRange(startTs, endTs int64) []string {
+	var (
+		retDay []string
+		tmpTs  int64
+		i      int64
+	)
+	if startTs > endTs {
+		tmpTs = startTs
+		startTs = endTs
+		endTs = tmpTs
+	}
+	i = 0
+	for {
+		tmpTs = i*86400 + startTs
+		// tmpTs = endTs - i*86400
+		retDay = append(retDay, time.Unix(tmpTs, 0).Format("2006-01-02"))
+		if tmpTs > endTs {
+			break
+		}
+		i++
+
+		// if tmpTs == startTs {
+		// 	retDay = append(retDay, time.Unix(tmpTs, 0).Format("2006-01-02"))
+		// }
+
+		//fmt.Println(tmpTs)
+	}
+	return retDay
+}
+
+// GetTodayFirstTs 获取当天凌晨时间戳
+func GetTodayFirstTs() int64 {
+	timeStr := time.Now().Format("2006-01-02")
+	t, _ := time.Parse("2006-01-02", timeStr)
+	timeNumber := t.Unix()
+	return timeNumber
+}
+
+// StrArrayIndexOf 检查字符串数组中是否存在
+func StrArrayIndexOf(arr []string, val string) (index int, status bool) {
+	index = 0
+	status = false
+	for i, r := range arr {
+		if r == val {
+			index = i
+			status = true
+			break
+		}
+	}
+	return
+}
