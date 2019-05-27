@@ -11,6 +11,7 @@ import (
 	"mos/src/pkg/e"
 	"mos/src/pkg/setting"
 	"mos/src/pkg/util"
+	"mos/src/server/route/annotations"
 	"mos/src/server/route/jenkins"
 	"mos/src/server/route/project"
 	"mos/src/server/route/ticket"
@@ -71,6 +72,11 @@ func InitTable(ctx *gin.Context) {
 	}
 	if !glo.Db.HasTable(&project.Project{}) {
 		if err := glo.Db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&project.Project{}).Error; err != nil {
+			panic(err)
+		}
+	}
+	if !glo.Db.HasTable(&annotations.Annotation{}) {
+		if err := glo.Db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&annotations.Annotation{}).Error; err != nil {
 			panic(err)
 		}
 	}

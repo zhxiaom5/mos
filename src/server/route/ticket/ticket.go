@@ -291,8 +291,9 @@ func TicketTypeMsg(ctx *gin.Context) {
 	for _, r := range typeList {
 		sig.ID = r.ID
 		sig.Name = r.Name
+		retData = append(retData, sig)
 	}
-	retData = append(retData, sig)
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":    e.SUCCESS,
 		"message": e.SUCCESS_MSG,
@@ -1031,11 +1032,10 @@ func GetTicketData(ctx *gin.Context) {
 		_, ok := ret.Data[project]
 		if ok == false {
 			ret.Data[project] = make([]uint, len(ret.XTag))
-		} else {
-			index, status := comfunc.StrArrayIndexOf(ret.XTag, dateStr)
-			if status {
-				ret.Data[project][index] = total
-			}
+		}
+		index, status := comfunc.StrArrayIndexOf(ret.XTag, dateStr)
+		if status {
+			ret.Data[project][index] = total
 		}
 	}
 	ctx.JSON(http.StatusOK, gin.H{

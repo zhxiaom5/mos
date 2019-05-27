@@ -46,13 +46,11 @@
           <el-date-picker
             v-model="time_picker.start_time"
             type="datetime"
-            size="small"
             placeholder="开始时间"
             @change="date_time_change('start')"/>
           <el-date-picker
             v-model="time_picker.end_time"
             type="datetime"
-            size="small"
             placeholder="结束时间"
             @change="date_time_change('end')"/>
         </el-form-item>
@@ -173,9 +171,9 @@
           width="360"
           label="操作">
           <template slot-scope="scope">
-            <span class="el-tag el-tag--success"><a @click="redirectTicketMsg(scope.row.number)" class="a_underline a_green">详情</a></span>
-            <span class="el-tag el-tag--danger"><a @click="handleTicketDelete(scope.$index, scope.row)" class="a_underline a_red">删除</a></span>
-            <span class="el-tag"><a @click="redirectTicketEdit(scope.row.number)" class="a_underline a_blue">修改</a></span>
+            <span class="el-tag el-tag--success"><a @click="redirectTicketMsg(scope.row.number)" class="pointer">详情</a></span>
+            <span class="el-tag el-tag--danger"><a @click="handleTicketDelete(scope.$index, scope.row)" class="pointer">删除</a></span>
+            <span class="el-tag"><a @click="redirectTicketEdit(scope.row.number)" class="pointer">修改</a></span>
             <el-dropdown>
               <el-button class="pan-btn light-blue-btn">
                 操作<i class="el-icon-arrow-down el-icon--right" />
@@ -183,32 +181,32 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
                   <div>
-                    <span v-if="checkPermStage(['send_ticket'], scope.row.stage, ['新建工单'])" class="el-tag el-tag--success">
+                    <span v-if="checkPermStage(['send_ticket'], scope.row.stage, ['新建工单'])" class="el-tag el-tag--success pointer">
                       <a @click="handleTicketSend(scope.$index, scope.row)" class="a_underline a_green">派发工单</a>
                     </span>
                   </div>
                   <div>
-                    <span v-if="checkPermNotStage(['change_ticket'], scope.row.stage, ['结单', '处理完毕'])" class="el-tag el-tag--success">
+                    <span v-if="checkPermNotStage(['change_ticket'], scope.row.stage, ['结单', '处理完毕'])" class="el-tag el-tag--success pointer">
                       <a @click="handleTicketChange(scope.$index, scope.row)" class="a_underline a_green">转发工单</a>
                     </span>
                   </div>
                   <div>
-                    <span v-if="checkPermNotStage(['deal_ticket'], scope.row.stage, ['结单', '处理完毕', '处理中'])" class="el-tag el-tag--info">
+                    <span v-if="checkPermNotStage(['deal_ticket'], scope.row.stage, ['结单', '处理完毕', '处理中'])" class="el-tag el-tag--info pointer">
                       <a @click="handleTicketDeal(scope.row.id)" class="a_underline a_blue">开始处理</a>
                     </span>
                   </div>
                   <div>
-                    <span v-if="checkPermNotStage(['deal_ticket'], scope.row.stage, ['结单', '处理完毕'])" class="el-tag el-tag--warning">
+                    <span v-if="checkPermNotStage(['deal_ticket'], scope.row.stage, ['结单', '处理完毕'])" class="el-tag el-tag--warning pointer">
                       <a @click="handleTicketCtl(scope.row, 'mark')" class="a_underline a_blue">添加记录</a>
                     </span>
                   </div>
                   <div>
-                    <span v-if="checkPermStage(['deal_ticket'], scope.row.stage, ['处理中'])" class="el-tag el-tag--warning">
+                    <span v-if="checkPermStage(['deal_ticket'], scope.row.stage, ['处理中'])" class="el-tag el-tag--warning pointer">
                       <a @click="handleTicketCtl(scope.row, 'finish')" class="a_underline a_blue">处理完毕</a>
                     </span>
                   </div>
                   <div>
-                    <span v-if="checkPermStage(['close_ticket'], scope.row.stage, ['处理完毕'])" class="el-tag el-tag--danger">
+                    <span v-if="checkPermStage(['close_ticket'], scope.row.stage, ['处理完毕'])" class="el-tag el-tag--danger pointer">
                       <a @click="handleTicketCtl(scope.row, 'close')" class="a_underline a_blue">结单</a>
                     </span>
                   </div>

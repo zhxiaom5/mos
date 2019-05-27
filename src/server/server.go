@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"mos/src/glo"
+	annonutil "mos/src/server/route/annotations"
 	jenkinsutil "mos/src/server/route/jenkins"
 	projectutil "mos/src/server/route/project"
 	sysutil "mos/src/server/route/sys"
@@ -33,6 +34,7 @@ func Serve() {
 	ticketutil.InitRoute(engine)
 	projectutil.InitRoute(engine)
 	jenkinsutil.InitRoute(engine)
+	annonutil.InitRoute(engine)
 	// apiV1 := engine.Group("/api/v1")
 	// 用户组路由
 	// apiV1.POST("/AddGroup", AddGroup)

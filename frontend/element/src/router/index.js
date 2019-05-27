@@ -55,6 +55,19 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/iaas',
+    component: Layout,
+    alwaysShow: true,
+    name: 'Iaas',
+    meta: { title: 'IAAS', icon: 'layer-group' },
+    children: [{
+      path: 'annotationTable',
+      name: 'AnnotationTable',
+      component: () => import('@/views/iaas/annotations/index'),
+      meta: { title: 'Annotation', icon: 'bug-report' }
+    }]
+  },
+  {
     path: '/ticket',
     component: Layout,
     alwaysShow: true,

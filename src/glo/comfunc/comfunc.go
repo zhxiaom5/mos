@@ -89,18 +89,11 @@ func GetDayByTimeStampRange(startTs, endTs int64) []string {
 	i = 0
 	for {
 		tmpTs = i*86400 + startTs
-		// tmpTs = endTs - i*86400
 		retDay = append(retDay, time.Unix(tmpTs, 0).Format("2006-01-02"))
 		if tmpTs > endTs {
 			break
 		}
 		i++
-
-		// if tmpTs == startTs {
-		// 	retDay = append(retDay, time.Unix(tmpTs, 0).Format("2006-01-02"))
-		// }
-
-		//fmt.Println(tmpTs)
 	}
 	return retDay
 }
