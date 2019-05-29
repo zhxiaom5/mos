@@ -11,15 +11,17 @@ var jwtSecret = []byte(setting.JwtSecret)
 
 type Claims struct {
 	Username string `json:username`
+	NickName string `json:nick_name`
 	jwt.StandardClaims
 }
 
 // GenerateToken 生成JWT Token
-func GenerateToken(username string) (string, error) {
+func GenerateToken(username, nick_name string) (string, error) {
 	nowTime := time.Now()
 	expriedTime := nowTime.Add(24 * time.Hour)
 	claims := Claims{
 		username,
+		nick_name,
 		jwt.StandardClaims{
 			ExpiresAt: expriedTime.Unix(),
 			Issuer:    "jwt-go",

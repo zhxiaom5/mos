@@ -12,6 +12,7 @@ import (
 	"mos/src/pkg/setting"
 	"mos/src/pkg/util"
 	"mos/src/server/route/annotations"
+	"mos/src/server/route/apimanager"
 	"mos/src/server/route/jenkins"
 	"mos/src/server/route/project"
 	"mos/src/server/route/ticket"
@@ -77,6 +78,16 @@ func InitTable(ctx *gin.Context) {
 	}
 	if !glo.Db.HasTable(&annotations.Annotation{}) {
 		if err := glo.Db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&annotations.Annotation{}).Error; err != nil {
+			panic(err)
+		}
+	}
+	if !glo.Db.HasTable(&apimanager.APITab{}) {
+		if err := glo.Db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&apimanager.APITab{}).Error; err != nil {
+			panic(err)
+		}
+	}
+	if !glo.Db.HasTable(&apimanager.APIKey{}) {
+		if err := glo.Db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&apimanager.APIKey{}).Error; err != nil {
 			panic(err)
 		}
 	}
@@ -298,7 +309,7 @@ func UserLogin(ctx *gin.Context) {
 		return
 	}
 	// JWT middleware生成token
-	token, err = util.GenerateToken(user.UserName)
+	token, err = util.GenerateToken(user.UserName, user.NickName)
 
 	// // 生成token, 旧方式
 	// token = comfunc.EncryptToken(user.UserName, time.Now().Unix(), glo.Config.MosAPI.EncryptKey)

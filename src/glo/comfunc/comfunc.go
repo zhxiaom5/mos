@@ -1,6 +1,8 @@
 package comfunc
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"mos/src/glo/encrypt"
 	"strings"
@@ -118,4 +120,11 @@ func StrArrayIndexOf(arr []string, val string) (index int, status bool) {
 		}
 	}
 	return
+}
+
+// Md5String 加密
+func Md5String(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }

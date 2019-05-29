@@ -66,7 +66,7 @@ export function checkPermStage(value, stage, label) {
     }
     return false
   } else {
-    console.error(`need label! Like "['新建工单','驳回']"`)
+    console.error(`need label! Like "['A','B']"`)
   }
 }
 
@@ -94,7 +94,7 @@ export function checkPermNotStage(value, stage, label) {
     }
     return true
   } else {
-    console.error(`need label! Like "['新建工单','驳回']"`)
+    console.error(`need label! Like "['A','B']"`)
   }
 }
 
@@ -106,9 +106,3 @@ export function check_stage(stage, value) {
   }
 }
 
-export function check_bool(status) {
-  if (status === true) {
-    return true
-  }
-  return false
-}

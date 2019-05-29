@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mos/src/glo"
 	annonutil "mos/src/server/route/annotations"
+	managerutil "mos/src/server/route/apimanager"
 	jenkinsutil "mos/src/server/route/jenkins"
 	projectutil "mos/src/server/route/project"
 	sysutil "mos/src/server/route/sys"
@@ -26,6 +27,7 @@ func Serve() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	engine.POST("/apiv1/addAnnotation", annonutil.APIAnnotation)
 	engine.POST("/InitTable", sysutil.InitTable)
 	engine.POST("/UserLogin", sysutil.UserLogin)
 	engine.POST("/JenkinsPost", jenkinsutil.JenkinsPost)
@@ -35,6 +37,7 @@ func Serve() {
 	projectutil.InitRoute(engine)
 	jenkinsutil.InitRoute(engine)
 	annonutil.InitRoute(engine)
+	managerutil.InitRoute(engine)
 	// apiV1 := engine.Group("/api/v1")
 	// 用户组路由
 	// apiV1.POST("/AddGroup", AddGroup)

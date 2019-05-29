@@ -109,6 +109,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/manager',
+    component: Layout,
+    alwaysShow: true,
+    name: 'Manager',
+    meta: { title: 'API管理', icon: 'layer-group' },
+    children: [{
+      path: 'apiManagerTable',
+      name: 'ApiManagerTable',
+      component: () => import('@/views/apimanager/index'),
+      meta: { title: '系统API列表', icon: 'bug-report' }
+    }]
+  },
+  {
     path: '/sys',
     component: Layout,
     alwaysShow: true,

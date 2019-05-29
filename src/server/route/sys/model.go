@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"mos/src/glo"
+	"mos/src/pkg/util"
 
 	// "mos/src/server/route/ticket"
 
@@ -265,6 +266,23 @@ func (u User) getPermission() (permissionArr []string, err error) {
 		}
 	} else {
 		permissionArr = []string{}
+	}
+	return
+}
+
+func (u User) getNickNameByToken(token string) (nickName string, err error) {
+	nickName = "nil"
+	err = nil
+	claims, err := util.ParseToken(token)
+	if err != nil {
+		nickName = "nil"
+		return
+	}
+	username := claims.Username
+	// 获取用户组信息
+	if err = glo.Db.Model(&User{}).Where("username = ?", username).First(&u).Error; err == nil {
+		nickName = u.NickName
+		return
 	}
 	return
 }

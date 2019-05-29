@@ -12,7 +12,7 @@
           </span>
         </el-form-item>
         <el-form-item>
-          <span class="el-tag el-tag--warning pointer" @click="handleAdd()">
+          <span class="el-tag pointer" @click="handleAdd()">
             <i class="el-icon-plus"></i>
             <a class="a_underline">添加</a>
           </span>
@@ -20,18 +20,21 @@
       </el-form>
       <el-table
         :data="tableData.filter(data => !listQuery.search || data.group.toLowerCase().includes(listQuery.search.toLowerCase()))"
+        :header-cell-style="tableHeaderColor"
         stripe
         border
         style="width: 100%">
         <el-table-column
-          type="index"
-          width="50" />
+          type="selection"
+          width="55" />
         <el-table-column
           label="RegionID"
-          prop="region_id" />
+          prop="region_id"
+          width="150" />
         <el-table-column
           label="所属项目名(project)"
-          prop="project" />
+          prop="project"
+          width="200" />
         <el-table-column
           label="内容(text)"
           prop="text" />
@@ -45,13 +48,18 @@
         <el-table-column
           label="标签时间"
           prop="start_time"
+          width="200"
         />
         <el-table-column
           align="center"
           label="操作"
+          width="300"
         >
           <template slot-scope="scope">
-            <span class="el-tag el-tag--danger pointer" @click="handleDelete(scope.$index, scope.row)"><a class="a_underline">删除</a></span>
+            <span class="el-tag el-tag--danger pointer" @click="handleDelete(scope.$index, scope.row)">
+              <i class="el-icon-delete"></i>
+              <a class="a_underline">删除</a>
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -68,7 +76,7 @@
             <el-input v-model="annonForm.text" />
           </el-form-item>
           <el-form-item label="标签">
-            <el-input v-model="annonForm.tags" />
+            <el-input v-model="annonForm.tags" placeholder="多标签请用','隔开" />
           </el-form-item>
           <el-form-item label="类型">
             <el-switch
@@ -108,6 +116,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
+import { tableHeaderColor } from '../../../utils/style.js'
 import { getAnnonList, addAnnon, deleteAnnon, Tst } from '@/api/annotations'
 export default {
   name: 'AnnotationTable',
@@ -155,6 +164,7 @@ export default {
     this.getAnnonList()
   },
   methods: {
+    tableHeaderColor,
     resetTemp() {
       this.annonForm = {
         id: undefined,

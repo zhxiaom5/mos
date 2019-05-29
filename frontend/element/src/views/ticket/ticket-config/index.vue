@@ -3,174 +3,177 @@
         <div class="filter-container">
             <el-tabs style="margin-top:15px;">
                 <!-- 工单类型 -->
-                <el-tab-pane label="工单类型">
-                    <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item>
-                        <el-input v-model="ticketTypeQuery.search" size="small" style="" placeholder="输入工单类型搜索"/>
-                        </el-form-item>
-                        <el-form-item>
-                        <el-button type="primary" size="small" icon="el-icon-search" @click="handleTicketTypeSearch()">搜索</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                        <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketTypeAdd()">添加</el-button>
-                        </el-form-item>
-                    </el-form>
-                    <el-table
-                        :data="dataTicketType.filter(data => !ticketTypeQuery.search || dataTicketType.name.toLowerCase().includes(ticketTypeQuery.search.toLowerCase()))"
-                        stripe
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        width="50" />
-                        <el-table-column
-                        label="工单类型"
-                        prop="name" />
-                        <el-table-column
-                        align="center"
-                        label="创建时间"
-                        prop="create_time">
-                        <template slot-scope="scope">
-                            <span>{{ scope.row.create_time }}</span>
-                        </template>
-                        </el-table-column>  
-                        <el-table-column
-                        align="center"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <!-- <span @click="handleEdit(scope.$index, scope.row)" class="el-tag el-tag--success">修改</span> -->
-                            <span class="el-tag el-tag--danger"><a @click="handleTicketTypeDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
-                            <span class="el-tag el-tag--primary"><a @click="handleTicketTypeEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
-                        </template>
-                        </el-table-column>
-                    </el-table>
-                    <pagination v-show="total.ticketType>0" :total="total.ticketType" :current_page.sync="ticketTypeQuery.current_page" :page_size.sync="ticketTypeQuery.page_size" align="right" @pagination="getTicketTypeList" />
-                    <el-dialog :visible.sync="dialogTypeFormVisible" title="新增/修改工单类型">
-                        <el-form ref="typeForm" :model="type_form" label-width="120px">
-                        <el-form-item label="ID">
-                            <el-input v-model="type_form.id" disabled />
-                        </el-form-item>
-                        <el-form-item label="工单类型">
-                            <el-input v-model="type_form.name" />
-                        </el-form-item>
-                        <el-form-item align="right" style="padding-right: 48px">
-                            <el-button type="primary" @click="dialogTypeStatus==='create'?createTicketTypeData():updateTicketTypeData()">确定</el-button>
-                            <el-button @click="dialogTypeFormVisible = false">取消</el-button>
-                        </el-form-item>
-                        </el-form>
-                    </el-dialog>
+                <el-tab-pane>
+                  <span slot="label"><i class="el-icon-date"></i> 工单类型</span>
+                  <el-form :inline="true" class="demo-form-inline">
+                      <el-form-item>
+                      <el-input v-model="ticketTypeQuery.search" size="small" style="" placeholder="输入工单类型搜索"/>
+                      </el-form-item>
+                      <el-form-item>
+                      <el-button type="primary" size="small" icon="el-icon-search" @click="handleTicketTypeSearch()">搜索</el-button>
+                      </el-form-item>
+                      <el-form-item>
+                      <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketTypeAdd()">添加</el-button>
+                      </el-form-item>
+                  </el-form>
+                  <el-table
+                      :data="dataTicketType.filter(data => !ticketTypeQuery.search || dataTicketType.name.toLowerCase().includes(ticketTypeQuery.search.toLowerCase()))"
+                      stripe
+                      border
+                      style="width: 100%">
+                      <el-table-column
+                      type="index"
+                      width="50" />
+                      <el-table-column
+                      label="工单类型"
+                      prop="name" />
+                      <el-table-column
+                      align="center"
+                      label="创建时间"
+                      prop="create_time">
+                      <template slot-scope="scope">
+                          <span>{{ scope.row.create_time }}</span>
+                      </template>
+                      </el-table-column>  
+                      <el-table-column
+                      align="center"
+                      label="操作">
+                      <template slot-scope="scope">
+                          <!-- <span @click="handleEdit(scope.$index, scope.row)" class="el-tag el-tag--success">修改</span> -->
+                          <span class="el-tag el-tag--danger"><a @click="handleTicketTypeDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
+                          <span class="el-tag el-tag--primary"><a @click="handleTicketTypeEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
+                      </template>
+                      </el-table-column>
+                  </el-table>
+                  <pagination v-show="total.ticketType>0" :total="total.ticketType" :current_page.sync="ticketTypeQuery.current_page" :page_size.sync="ticketTypeQuery.page_size" align="right" @pagination="getTicketTypeList" />
+                  <el-dialog :visible.sync="dialogTypeFormVisible" title="新增/修改工单类型">
+                      <el-form ref="typeForm" :model="type_form" label-width="120px">
+                      <el-form-item label="ID">
+                          <el-input v-model="type_form.id" disabled />
+                      </el-form-item>
+                      <el-form-item label="工单类型">
+                          <el-input v-model="type_form.name" />
+                      </el-form-item>
+                      <el-form-item align="right" style="padding-right: 48px">
+                          <el-button type="primary" @click="dialogTypeStatus==='create'?createTicketTypeData():updateTicketTypeData()">确定</el-button>
+                          <el-button @click="dialogTypeFormVisible = false">取消</el-button>
+                      </el-form-item>
+                      </el-form>
+                  </el-dialog>
                 </el-tab-pane>
                 <!-- 工单等级 -->
-                <el-tab-pane label="工单等级">
-                    <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item>
-                        <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketLevelAdd()">添加</el-button>
-                        </el-form-item>
-                    </el-form>
-                    <el-table
-                        :data="dataTicketLevel"
-                        stripe
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        width="50" />
-                        <el-table-column
-                        label="等级名称"
-                        prop="name" />
-                        <el-table-column
-                        label="工单等级"
-                        prop="level" />
-                        <el-table-column
-                        label="工单时效"
-                        prop="time" />
-                        <el-table-column
-                        align="center"
-                        label="创建时间"
-                        prop="create_time">
-                        <template slot-scope="scope">
-                            <span>{{ scope.row.create_time }}</span>
-                        </template>
-                        </el-table-column>  
-                        <el-table-column
-                        align="center"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <span class="el-tag el-tag--danger"><a @click="handleTicketLevelDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
-                            <span class="el-tag el-tag--primary"><a @click="handleTicketLevelEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
-                        </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-dialog :visible.sync="dialogLevelFormVisible" title="新增/修改工单等级">
-                        <el-form ref="levelForm" :model="level_form" label-width="120px">
-                        <el-form-item label="ID">
-                            <el-input v-model="level_form.id" disabled />
-                        </el-form-item>
-                        <el-form-item label="工单中文名称">
-                            <el-input v-model="level_form.name" />
-                        </el-form-item>
-                        <el-form-item label="工单等级">
-                            <el-input-number v-model="level_form.level" :min="0" :max="8" label="等级" />
-                        </el-form-item>
-                        <el-form-item label="工单时效">
-                            <el-input-number v-model="level_form.time" :min="0" :max="128" label="天" />
-                        </el-form-item>
-                        <el-form-item align="right" style="padding-right: 48px">
-                            <el-button type="primary" @click="dialogLevelStatus==='create'?createTicketLevelData():updateTicketLevelData()">确定</el-button>
-                            <el-button @click="dialogLevelFormVisible = false">取消</el-button>
-                        </el-form-item>
-                        </el-form>
-                    </el-dialog>
+                <el-tab-pane>
+                  <span slot="label"><i class="el-icon-star-off"></i> 工单等级</span>
+                  <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                    <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketLevelAdd()">添加</el-button>
+                    </el-form-item>
+                  </el-form>
+                  <el-table
+                    :data="dataTicketLevel"
+                    stripe
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    type="index"
+                    width="50" />
+                    <el-table-column
+                    label="等级名称"
+                    prop="name" />
+                    <el-table-column
+                    label="工单等级"
+                    prop="level" />
+                    <el-table-column
+                    label="工单时效"
+                    prop="time" />
+                    <el-table-column
+                    align="center"
+                    label="创建时间"
+                    prop="create_time">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.create_time }}</span>
+                    </template>
+                    </el-table-column>  
+                    <el-table-column
+                    align="center"
+                    label="操作">
+                    <template slot-scope="scope">
+                        <span class="el-tag el-tag--danger"><a @click="handleTicketLevelDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
+                        <span class="el-tag el-tag--primary"><a @click="handleTicketLevelEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
+                    </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-dialog :visible.sync="dialogLevelFormVisible" title="新增/修改工单等级">
+                      <el-form ref="levelForm" :model="level_form" label-width="120px">
+                      <el-form-item label="ID">
+                          <el-input v-model="level_form.id" disabled />
+                      </el-form-item>
+                      <el-form-item label="工单中文名称">
+                          <el-input v-model="level_form.name" />
+                      </el-form-item>
+                      <el-form-item label="工单等级">
+                          <el-input-number v-model="level_form.level" :min="0" :max="8" label="等级" />
+                      </el-form-item>
+                      <el-form-item label="工单时效">
+                          <el-input-number v-model="level_form.time" :min="0" :max="128" label="天" />
+                      </el-form-item>
+                      <el-form-item align="right" style="padding-right: 48px">
+                          <el-button type="primary" @click="dialogLevelStatus==='create'?createTicketLevelData():updateTicketLevelData()">确定</el-button>
+                          <el-button @click="dialogLevelFormVisible = false">取消</el-button>
+                      </el-form-item>
+                      </el-form>
+                  </el-dialog>
                 </el-tab-pane>
                  <!-- 工单来源 -->
-                <el-tab-pane label="工单来源">
-                    <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item>
-                        <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketSourceAdd()">添加</el-button>
-                        </el-form-item>
+                <el-tab-pane>
+                  <span slot="label"><i class="el-icon-share"></i> 工单来源</span>
+                  <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                    <el-button type="success" size="small" icon="el-icon-plus" @click="handleTicketSourceAdd()">添加</el-button>
+                    </el-form-item>
+                  </el-form>
+                  <el-table
+                      :data="dataTicketSource"
+                      stripe
+                      border
+                      style="width: 100%">
+                      <el-table-column
+                      type="index"
+                      width="50" />
+                      <el-table-column
+                      label="来源名称"
+                      prop="name" />
+                      <el-table-column
+                      align="center"
+                      label="创建时间"
+                      prop="create_time">
+                      <template slot-scope="scope">
+                          <span>{{ scope.row.create_time }}</span>
+                      </template>
+                      </el-table-column>
+                      <el-table-column
+                      align="center"
+                      label="操作">
+                      <template slot-scope="scope">
+                          <span class="el-tag el-tag--danger"><a @click="handleTicketSourceDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
+                          <span class="el-tag el-tag--primary"><a @click="handleTicketSourceEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
+                      </template>
+                      </el-table-column>
+                  </el-table>
+                  <el-dialog :visible.sync="dialogSourceFormVisible" title="新增/修改工单来源">
+                    <el-form ref="sourceForm" :model="source_form" label-width="120px">
+                    <el-form-item label="ID">
+                      <el-input v-model="source_form.id" disabled />
+                    </el-form-item>
+                    <el-form-item label="工单来源名称">
+                      <el-input v-model="source_form.name" />
+                    </el-form-item>
+                    <el-form-item align="right" style="padding-right: 48px">
+                      <el-button type="primary" @click="dialogSourceStatus==='create'?createTicketSourceData():updateTicketSourceData()">确定</el-button>
+                      <el-button @click="dialogSourceFormVisible = false">取消</el-button>
+                    </el-form-item>
                     </el-form>
-                    <el-table
-                        :data="dataTicketSource"
-                        stripe
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        width="50" />
-                        <el-table-column
-                        label="来源名称"
-                        prop="name" />
-                        <el-table-column
-                        align="center"
-                        label="创建时间"
-                        prop="create_time">
-                        <template slot-scope="scope">
-                            <span>{{ scope.row.create_time }}</span>
-                        </template>
-                        </el-table-column>
-                        <el-table-column
-                        align="center"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <span class="el-tag el-tag--danger"><a @click="handleTicketSourceDelete(scope.$index, scope.row)" class="a_underline">删除</a></span>
-                            <span class="el-tag el-tag--primary"><a @click="handleTicketSourceEdit(scope.$index, scope.row)" class="a_underline">修改</a></span>
-                        </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-dialog :visible.sync="dialogSourceFormVisible" title="新增/修改工单来源">
-                        <el-form ref="sourceForm" :model="source_form" label-width="120px">
-                        <el-form-item label="ID">
-                            <el-input v-model="source_form.id" disabled />
-                        </el-form-item>
-                        <el-form-item label="工单来源名称">
-                            <el-input v-model="source_form.name" />
-                        </el-form-item>
-                        <el-form-item align="right" style="padding-right: 48px">
-                            <el-button type="primary" @click="dialogSourceStatus==='create'?createTicketSourceData():updateTicketSourceData()">确定</el-button>
-                            <el-button @click="dialogSourceFormVisible = false">取消</el-button>
-                        </el-form-item>
-                        </el-form>
-                    </el-dialog>
+                  </el-dialog>
                 </el-tab-pane>
             </el-tabs>
         </div>

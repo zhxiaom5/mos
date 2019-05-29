@@ -1,4 +1,4 @@
-package annotations
+package apimanager
 
 import (
 	"log"
@@ -18,10 +18,13 @@ func InitRoute(engine *gin.Engine) {
 	}
 	engine.Use(jwt.JWT())
 	// 用户路由
-	annAPI := engine.Group("/iaas")
+	managerAPI := engine.Group("/manager")
 	{
-		annAPI.GET("/AnnotationList", AnnotationList)
-		annAPI.POST("/AnnotationAdd", AnnotationAdd)
-		annAPI.POST("/AnnotationDelete", AnnotationDelete)
+		managerAPI.GET("/APIList", APIList)
+		managerAPI.POST("/APIAdd", APIAdd)
+		managerAPI.POST("/APIDelete", APIDelete)
+		managerAPI.POST("/APIKeyAdd", APIKeyAdd)
+		managerAPI.POST("/APIKeyDelete", APIKeyDelete)
+
 	}
 }

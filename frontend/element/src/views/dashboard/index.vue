@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
     <panel-group
-      :myMonthTicket="dataStatus.myMonthTicket"
-      :myUnfinishTicket="dataStatus.myUnfinishTicket"
-      :groupUnfinishTicket="dataStatus.groupUnfinishTicket"
-      :allMonthTicket="dataStatus.allMonthTicket" />
+      :unfinishTotal="dataStatus.unfinishTotal"
+      :ticketTotal="dataStatus.ticketTotal"
+      :myUnfinish="dataStatus.myUnfinish"
+      :myTotal="dataStatus.myTotal" />
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <ticket-line-chart :chart-data="lineChartData" :x-tag="x_tag"/>
     </el-row>
@@ -29,10 +29,10 @@ export default {
       x_tag: [],
       lineChartData: {},
       dataStatus: {
-        myMonthTicket: 0,
-        myUnfinishTicket: 0,
-        groupUnfinishTicket: 0,
-        allMonthTicket: 0
+        unfinishTotal: 0,
+        ticketTotal: 0,
+        myUnfinish: 0,
+        myTotal: 0
       }
     }
   },
@@ -56,6 +56,10 @@ export default {
       getTicketLineData().then(response => {
         this.lineChartData = response.data
         this.x_tag = response.x_tag
+        this.$set(this.dataStatus, 'unfinishTotal', response.datadash.unfinishTotal)
+        this.$set(this.dataStatus, 'ticketTotal', response.datadash.ticketTotal)
+        this.$set(this.dataStatus, 'myUnfinish', response.datadash.myUnfinish)
+        this.$set(this.dataStatus, 'myTotal', response.datadash.myTotal)
       })
     }
   }

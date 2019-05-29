@@ -18,7 +18,7 @@ export default {
     },
     height: {
       type: String,
-      default: '350px'
+      default: '500px'
     },
     autoResize: {
       type: Boolean,
@@ -155,7 +155,20 @@ export default {
         legend: {
           data: dataLegend
         },
-        series: series_array
+        series: series_array,
+        title : {
+          text: '过去30日工单情况'
+        },
+        toolbox: {
+          show : true,
+          feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+          }
+        },
       })
     },
     initChart() {

@@ -9,7 +9,7 @@ const (
 	TOKEN_INVAILD     int    = 50001
 	TOKEN_EXPRIED     int    = 50002
 	ERROR             int    = 30001
-	SUCCESS_MSG       string = "成功"
+	SUCCESS_MSG       string = "请求成功"
 	PARAM_ERROR_MSG   string = "请求参数错误"
 	TOKEN_EMPTY_MSG   string = "请求未携带token，无权限访问"
 	TOKEN_INVAILD_MSG string = "token非法"

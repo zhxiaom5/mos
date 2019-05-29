@@ -5,10 +5,10 @@ import (
 	"mos/src/glo"
 	"mos/src/glo/comfunc"
 	"mos/src/pkg/e"
+	"mos/src/server/route/apimanager"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -108,12 +108,6 @@ func AnnotationAdd(ctx *gin.Context) {
 	}
 	if err := glo.Db.Model(&Annotation{}).Last(&a).Error; err != nil {
 		regionID = 1
-		// ctx.JSON(http.StatusOK, gin.H{
-		// 	"code":    e.ERROR,
-		// 	"message": e.ERROR_MSG,
-		// 	"debug":   err.Error(),
-		// })
-		// return
 	} else {
 		regionID = a.RegionID + 1
 	}
@@ -180,12 +174,89 @@ func AnnotationDelete(ctx *gin.Context) {
 	})
 	return
 }
-func Tst(ctx *gin.Context) {
-	fmt.Printf("%s", comfunc.FormatTs(time.Now().Unix()))
-	time.Sleep(time.Second * 30)
-	fmt.Printf("%s", comfunc.FormatTs(time.Now().Unix()))
+
+// APIAnnotation API 添加AnnotationAdd信息
+func APIAnnotation(ctx *gin.Context) {
+	type reqPostData struct {
+		Project   string `json:"project"`
+		Text      string `json:"text"`
+		Tags      string `json:"tags"`
+		StartTime int64  `json:"startTime"`
+	}
+
+	var (
+		req         reqPostData
+		a           Annotation
+		api         apimanager.APITab
+		regionID    uint
+		authKey     string
+		isAuthorize bool
+	)
+	authKey = ctx.GetHeader("Auth-Token")
+	queryDb := glo.Db.Set("gorm:auto_preload", true).Model(&apimanager.APITab{})
+	if authKey == `` {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    e.TOKEN_EMPTY,
+			"message": e.TOKEN_EMPTY_MSG,
+			"debug":   "nil",
+		})
+		return
+	}
+	if err := queryDb.Where("api_uri = ?", ctx.Request.RequestURI).First(&api).Error; err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    e.ERROR,
+			"message": e.ERROR_MSG,
+			"debug":   err.Error(),
+		})
+		return
+	}
+	for _, r := range api.APIKey {
+		if authKey == r.AuthKey {
+			isAuthorize = true
+			break
+		}
+	}
+	if isAuthorize == false {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    e.TOKEN_INVAILD,
+			"message": e.TOKEN_INVAILD_MSG,
+			"debug":   "非法Token",
+		})
+		return
+	}
+	err := ctx.BindJSON(&req)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    e.PARAM_ERROR,
+			"message": e.PARAM_ERROR_MSG,
+			"debug":   err.Error(),
+		})
+		return
+	}
+	if err := glo.Db.Model(&Annotation{}).Last(&a).Error; err != nil {
+		regionID = 1
+	} else {
+		regionID = a.RegionID + 1
+	}
+	insertData := Annotation{
+		IsRegion:  false,
+		Project:   req.Project,
+		Text:      req.Text,
+		Tag:       req.Tags,
+		RegionID:  regionID,
+		StartTime: req.StartTime,
+	}
+	if err := glo.Db.Model(&Annotation{}).Create(&insertData).Error; err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    e.ERROR,
+			"message": e.ERROR_MSG,
+			"debug":   err.Error(),
+		})
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"code": "1",
+		"code":    e.SUCCESS,
+		"message": e.SUCCESS_MSG,
 	})
 	return
 }

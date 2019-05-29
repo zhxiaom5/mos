@@ -5,6 +5,7 @@ import (
 	"mos/src/glo"
 	"mos/src/glo/comfunc"
 	"mos/src/pkg/e"
+	"mos/src/pkg/util"
 	"net/http"
 	"strconv"
 	"time"
@@ -998,9 +999,16 @@ func TicketCtl(ctx *gin.Context) {
 }
 
 func GetTicketData(ctx *gin.Context) {
+	type dataDash struct {
+		UnfinishTotal int `json:"unfinishTotal"`
+		TicketTotal   int `json:"ticketTotal"`
+		MyUnfinish    int `json:"myUnfinish"`
+		MyTotal       int `json:"myTotal"`
+	}
 	type retData struct {
-		XTag []string `json:"x_tag"`
-		Data map[string][]uint
+		XTag     []string `json:"x_tag"`
+		Data     map[string][]uint
+		DashData dataDash
 	}
 	var (
 		ret     retData
@@ -1016,14 +1024,30 @@ func GetTicketData(ctx *gin.Context) {
 	ret.XTag = comfunc.GetDayByTimeStampRange(startTs, endTs)
 	ret.Data = make(map[string][]uint, len(ret.XTag))
 
+	token := ctx.GetHeader("X-Token")
+	claims, err := util.ParseToken(token)
+	if err := glo.Db.Model(&Ticket{}).Where("dealer = ? and stage != ?", claims.NickName, ConstTicketClose).Count(&ret.DashData.MyUnfinish).Error; err != nil {
+		ret.DashData.MyUnfinish = 0
+	}
+	if err := glo.Db.Model(&Ticket{}).Where("dealer = ?", claims.NickName).Count(&ret.DashData.MyTotal).Error; err != nil {
+		ret.DashData.MyTotal = 0
+	}
+	if err := glo.Db.Model(&Ticket{}).Count(&ret.DashData.TicketTotal).Error; err != nil {
+		ret.DashData.TicketTotal = 0
+	}
+	if err := glo.Db.Model(&Ticket{}).Count(&ret.DashData.UnfinishTotal).Error; err != nil {
+		ret.DashData.UnfinishTotal = 0
+	}
+
 	rows, err := glo.Db.Raw("select project, DATE_FORMAT(created_at, '%Y-%m-%d') AS day, count(*) from Ticket group by project, DATE_FORMAT(created_at, '%Y-%m-%d') order by day desc").Rows()
 	defer rows.Close()
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
-			"code":    e.ERROR,
-			"data":    ret.Data,
-			"x_tag":   ret.XTag,
-			"message": e.ERROR_MSG,
+			"code":     e.ERROR,
+			"data":     ret.Data,
+			"x_tag":    ret.XTag,
+			"datadash": ret.DashData,
+			"message":  e.ERROR_MSG,
 		})
 		return
 	}
@@ -1038,11 +1062,13 @@ func GetTicketData(ctx *gin.Context) {
 			ret.Data[project][index] = total
 		}
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    e.SUCCESS,
-		"data":    ret.Data,
-		"x_tag":   ret.XTag,
-		"message": e.SUCCESS_MSG,
+		"code":     e.SUCCESS,
+		"data":     ret.Data,
+		"x_tag":    ret.XTag,
+		"datadash": ret.DashData,
+		"message":  e.SUCCESS_MSG,
 	})
 	return
 }

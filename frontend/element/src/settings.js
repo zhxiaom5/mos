@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Template',
+  title: 'IAAS系统',
 
   /**
    * @type {boolean} true | false

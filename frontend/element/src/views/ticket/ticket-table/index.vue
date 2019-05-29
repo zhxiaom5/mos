@@ -16,7 +16,7 @@
           <el-input v-model="listQuery.dealer" placeholder="输入处理人搜索" class="form-select-width" />
         </el-form-item>
         <el-form-item>
-          <el-select v-model="listQuery.stage" multiple placeholder="选择工单状态" class="form-select-width">
+          <el-select v-model="listQuery.stage" multiple placeholder="选择工单状态" size="small" class="form-select-width" >
             <el-option
               v-for="(stage_item, index) in stageOptions"
               :key="stage_item.value+index"
@@ -80,6 +80,7 @@
         ref="multipleTable"
         :data="tableData"
         :v-loading="true"
+        :header-cell-style="tableHeaderColor"
         border
         stripe
         style="width: 100%; font-size: 14px"
@@ -210,11 +211,6 @@
                       <a @click="handleTicketCtl(scope.row, 'close')" class="a_underline a_blue">结单</a>
                     </span>
                   </div>
-                  <!-- <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleTicketSend(scope.$index, scope.row)">派发工单
-                  </el-button> -->
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -278,6 +274,7 @@ import { getGroupUserOptions } from '@/api/group'
 import { getProjectMsg } from '@/api/project'
 import { mapGetters } from 'vuex'
 import global_ from '../../../utils/global'
+import { tableHeaderColor } from '../../../utils/style.js'
 import { checkPermStage, checkTicketWorkPerm, checkPermNotStage } from '@/utils/permission'
 import Pagination from '@/components/Pagination'
 
@@ -395,6 +392,7 @@ export default {
     this.getGroupUserOptions()
   },
   methods: {
+    tableHeaderColor,
     checkTicketWorkPerm,
     checkPermStage,
     checkPermNotStage,
@@ -736,6 +734,5 @@ export default {
   .popover {
     background: #909399;
   }
-
 </style>
 
