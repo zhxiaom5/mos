@@ -36,13 +36,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -64,8 +62,31 @@ export const constantRoutes = [
       path: 'annotationTable',
       name: 'AnnotationTable',
       component: () => import('@/views/iaas/annotations/index'),
-      meta: { title: 'Annotation', icon: 'bug-report' }
+      meta: { title: 'Annotation', icon: 'bug-report', roles: ['ADMIN'] }
     }]
+  },
+  {
+    path: '/manager',
+    component: Layout,
+    alwaysShow: true,
+    name: 'Manager',
+    meta: { title: 'API管理', icon: 'layer-group', roles: ['ADMIN'] },
+    children: [{
+      path: 'apiManagerTable',
+      name: 'ApiManagerTable',
+      component: () => import('@/views/apimanager/index'),
+      meta: { title: '系统API列表', icon: 'bug-report' }
+    }]
+  },
+  {
+    path: 'external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+        meta: { title: '外部链接', icon: 'international', roles: ['ADMIN'] }
+      }
+    ]
   },
   {
     path: '/ticket',
@@ -109,19 +130,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/manager',
-    component: Layout,
-    alwaysShow: true,
-    name: 'Manager',
-    meta: { title: 'API管理', icon: 'layer-group' },
-    children: [{
-      path: 'apiManagerTable',
-      name: 'ApiManagerTable',
-      component: () => import('@/views/apimanager/index'),
-      meta: { title: '系统API列表', icon: 'bug-report' }
-    }]
-  },
-  {
     path: '/sys',
     component: Layout,
     alwaysShow: true,
@@ -154,21 +162,12 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '外部链接', icon: 'international' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
+    // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+export const asyncRoutes = [
+]
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),

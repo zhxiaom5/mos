@@ -1,115 +1,137 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form :inline="true" class="demo-form-inline">
-        <el-form-item>
-          <el-input v-model="listQuery.search" size="small" style="" placeholder="输入annotations搜索"/>
-        </el-form-item>
-        <el-form-item>
-          <span class="el-tag el-tag--info pointer" @click="handleSearch()">
-            <i class="el-icon-search"></i>
-            <a class="a_underline">搜索</a>
-          </span>
-        </el-form-item>
-        <el-form-item>
-          <span class="el-tag pointer" @click="handleAdd()">
-            <i class="el-icon-plus"></i>
-            <a class="a_underline">添加</a>
-          </span>
-        </el-form-item>
-      </el-form>
-      <el-table
-        :data="tableData.filter(data => !listQuery.search || data.group.toLowerCase().includes(listQuery.search.toLowerCase()))"
-        :header-cell-style="tableHeaderColor"
-        stripe
-        border
-        style="width: 100%">
-        <el-table-column
-          type="selection"
-          width="55" />
-        <el-table-column
-          label="RegionID"
-          prop="region_id"
-          width="150" />
-        <el-table-column
-          label="所属项目名(project)"
-          prop="project"
-          width="200" />
-        <el-table-column
-          label="内容(text)"
-          prop="text" />
-        <el-table-column
-          label="标签(tag)"
-          prop="tag">
-          <template slot-scope="scope">
-            <span v-for="tags in scope.row.tag" :key="tags+scope.$index" class="el-tag el-tag--success">{{ tags }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="标签时间"
-          prop="start_time"
-          width="200"
-        />
-        <el-table-column
-          align="center"
-          label="操作"
-          width="300"
-        >
-          <template slot-scope="scope">
-            <span class="el-tag el-tag--danger pointer" @click="handleDelete(scope.$index, scope.row)">
-              <i class="el-icon-delete"></i>
-              <a class="a_underline">删除</a>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination v-show="total>0" :total="total" :current_page.sync="listQuery.current_page" :page_size.sync="listQuery.page_size" align="right" @pagination="getAnnonList" />
-      <el-dialog :visible.sync="dialogAnnonFormVisible" title="新增/修改备注">
-        <el-form ref="annonForm" :model="annonForm" label-width="90px">
-          <el-form-item label="ID">
-            <el-input v-model="annonForm.id" disabled />
-          </el-form-item>
-          <el-form-item label="项目">
-            <el-input v-model="annonForm.project" :disabled="isEditable" />
-          </el-form-item>
-          <el-form-item label="内容">
-            <el-input v-model="annonForm.text" />
-          </el-form-item>
-          <el-form-item label="标签">
-            <el-input v-model="annonForm.tags" placeholder="多标签请用','隔开" />
-          </el-form-item>
-          <el-form-item label="类型">
-            <el-switch
-              v-model="annonForm.isRegion"
-              active-color="green"
-              inactive-color="red"
-              inactive-text="时间点"
-              active-text="时间范围"
+      <el-tabs style="margin-top:15px;">
+        <!-- Annotations -->
+        <el-tab-pane>
+          <span slot="label"><i class="el-icon-date"></i> Annontation</span>
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item>
+              <el-input v-model="listQuery.search" size="small" style="" placeholder="输入annotations搜索"/>
+            </el-form-item>
+            <el-form-item>
+              <span class="el-tag el-tag--info pointer" @click="getAnnonList()">
+                <i class="el-icon-search"></i>
+                <a class="a_underline">搜索</a>
+              </span>
+            </el-form-item>
+            <el-form-item>
+              <span class="el-tag pointer" @click="handleAdd()">
+                <i class="el-icon-plus"></i>
+                <a class="a_underline">添加</a>
+              </span>
+            </el-form-item>
+          </el-form>
+          <el-table
+            :data="tableData.filter(data => !listQuery.search || data.text.toLowerCase().includes(listQuery.search.toLowerCase()))"
+            :header-cell-style="tableHeaderColor"
+            stripe
+            border
+            style="width: 100%">
+            <el-table-column
+              type="selection"
+              width="55" />
+            <el-table-column
+              label="RegionID"
+              prop="region_id"
+              width="150" />
+            <el-table-column
+              label="所属项目名(project)"
+              prop="project"
+              width="200" />
+            <el-table-column
+              label="内容(text)"
+              prop="text" />
+            <el-table-column
+              label="标签(tag)"
+              prop="tag">
+              <template slot-scope="scope">
+                <span v-for="tags in scope.row.tag" :key="tags+scope.$index" class="el-tag el-tag--success">{{ tags }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="标签时间"
+              prop="start_time"
+              width="200"
             />
-          </el-form-item>
-          <el-form-item label="时间">
-            <el-date-picker
-              v-model="timePicker.startTime"
-              type="datetime"
-              size="small"
-              placeholder="开始时间"
-              @change="dateTimeChange('start')"
-            />
-            <el-date-picker
-              v-if="isEndTimeVisbale"
-              v-model="timePicker.endTime"
-              type="datetime"
-              size="small"
-              placeholder="结束时间"
-              @change="dateTimeChange('end')"
-            />
-          </el-form-item>
-          <el-form-item align="right" style="padding-right: 48px">
-            <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
-            <el-button @click="dialogAnnonFormVisible = false">取消</el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
+            <el-table-column
+              align="center"
+              label="操作"
+              width="300"
+            >
+              <template slot-scope="scope">
+                <span class="el-tag el-tag--danger pointer" @click="handleDelete(scope.$index, scope.row)">
+                  <i class="el-icon-delete"></i>
+                  <a class="a_underline">删除</a>
+                </span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="total>0" :total="total" :current_page.sync="listQuery.current_page" :page_size.sync="listQuery.page_size" align="right" @pagination="getAnnonList" />
+        </el-tab-pane>
+        <!-- Jenkins -->
+        <el-tab-pane>
+          <span slot="label"><i class="el-icon-star-off"></i> Jenkins</span>
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item>
+              <el-input v-model="listQueryJenkins.search" size="small" style="" placeholder="输入Jenkins搜索"/>
+            </el-form-item>
+            <el-form-item>
+              <span class="el-tag el-tag--info pointer" @click="getJenkinsList()">
+                <i class="el-icon-search"></i>
+                <a class="a_underline">搜索</a>
+              </span>
+            </el-form-item>
+          </el-form>
+          <el-table
+            :data="tableJenkinsData.filter(data => !listQueryJenkins.search || data.project.toLowerCase().includes(listQueryJenkins.search.toLowerCase()))"
+            :header-cell-style="tableHeaderColor"
+            stripe
+            border
+            style="width: 100%">
+            <el-table-column
+              type="selection"
+              width="55" />
+            <el-table-column
+              label="项目"
+              prop="project"
+              width="150" />
+            <el-table-column
+              label="标题"
+              prop="title"
+              width="350" />
+            <el-table-column
+              label="构建者"
+              prop="build_user" />
+            <el-table-column
+              label="状态"
+              prop="build_status" />  
+            <el-table-column
+              label="主机"
+              prop="hosts">
+              <template slot-scope="scope">
+                <span v-for="tags in scope.row.tag" :key="tags+scope.$index" class="el-tag el-tag--success">{{ tags }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="标签时间"
+              prop="create_time"
+              width="200" />
+            <el-table-column
+              align="center"
+              label="操作"
+              width="300">
+              <template>
+                <span class="el-tag el-tag--danger pointer" @click="handleJenkinsDelete()">
+                  <i class="el-icon-delete"></i>
+                  <a class="a_underline">删除</a>
+                </span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="total>0" :total="totalJenkins" :current_page.sync="listQueryJenkins.current_page" :page_size.sync="listQueryJenkins.page_size" align="right" @pagination="getJenkinsList" />
+        </el-tab-pane>
+      </el-tabs>  
     </div>
   </div>
 </template>
@@ -117,7 +139,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { tableHeaderColor } from '../../../utils/style.js'
-import { getAnnonList, addAnnon, deleteAnnon, Tst } from '@/api/annotations'
+import { getAnnonList, addAnnon, deleteAnnon, getJenkinsList } from '@/api/annotations'
 export default {
   name: 'AnnotationTable',
   components: { Pagination },
@@ -128,8 +150,15 @@ export default {
         endTime: undefined
       },
       tableData: [],
+      tableJenkinsData: [],
+      totalJenkins: 0,
       total: 0,
       listQuery: {
+        current_page: 1,
+        page_size: 20,
+        search: ''
+      },
+      listQueryJenkins: {
         current_page: 1,
         page_size: 20,
         search: ''
@@ -162,6 +191,7 @@ export default {
   },
   created() {
     this.getAnnonList()
+    this.getJenkinsList()
   },
   methods: {
     tableHeaderColor,
@@ -192,10 +222,10 @@ export default {
         this.total = response.total
       })
     },
-    handleSearch() {
-      getAnnonList(this.listQuery).then(response => {
-        this.tableData = response.data
-        this.total = response.total
+    getJenkinsList() {
+      getJenkinsList(this.listQueryJenkins).then(response => {
+        this.tableJenkinsData = response.data
+        this.totalJenkins = response.total
       })
     },
     handleAdd() {
@@ -263,22 +293,12 @@ export default {
         })
       })
     },
-    updateData() {
-    //   const This = this
-    //   updateGroup(this.group_form).then(response => {
-    //     this.$message({
-    //       message: response.message,
-    //       type: 'success',
-    //       duration: 2000,
-    //       onClose: function refresh() {
-    //         This.dialogGroupFormVisible = false
-    //         This.getGroupList()
-    //       }
-    //     })
-    //   })
-    },
-    test() {
-      Tst()
+    handleJenkinsDelete() {
+      this.$message({
+        message: "禁止删除",
+        type: 'error',
+        duration: 1000
+      })
     }
   }
 }

@@ -270,7 +270,7 @@ export default {
           type: 'success',
           duration: 1000,
           onClose: function refresh() {
-            This.dialogApiFormVisible = false
+            This.dialogKeyFormVisible = false
             This.getApiList()
           }
         })

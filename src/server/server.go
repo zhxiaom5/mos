@@ -26,7 +26,7 @@ func Serve() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-
+	
 	engine.POST("/apiv1/addAnnotation", annonutil.APIAnnotation)
 	engine.POST("/InitTable", sysutil.InitTable)
 	engine.POST("/UserLogin", sysutil.UserLogin)

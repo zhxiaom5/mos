@@ -6,10 +6,9 @@ import (
 
 // APITab API管理
 type APITab struct {
-	APIURI  string `gorm:"type:varchar(256);unique;not null;column:api_uri"`
+	APIURI  string `gorm:"type:varchar(256);not null;column:api_uri"`
 	Content string `gorm:"type:varchar(256);not null;column:content"`
-
-	APIKey []APIKey
+	APIKey  []APIKey
 	gorm.Model
 }
 
@@ -18,7 +17,7 @@ func (APITab) TableName() string {
 	return "APITab"
 }
 
-// APITab API管理
+// APITabInfo API管理
 type APITabInfo struct {
 	ID         uint         `json:"id"`
 	Content    string       `json:"content"`
@@ -40,7 +39,7 @@ func (APIKey) TableName() string {
 	return "APIKey"
 }
 
-// APIKey API管理
+// APIKeyInfo API管理
 type APIKeyInfo struct {
 	ID        uint   `json:"id"`
 	AuthKey   string `json:"auth_key"`

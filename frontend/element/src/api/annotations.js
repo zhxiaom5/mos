@@ -30,3 +30,10 @@ export function Tst() {
   })
 }
 
+export function getJenkinsList(query) {
+  return request({
+    url: '/jenkins/JenkinsJobList',
+    method: 'get',
+    params: query
+  })
+}

@@ -6,12 +6,16 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
+  roles: [],
   perms: []
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -43,29 +47,27 @@ const actions = {
     })
   },
 
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-        if (data.perms && data.perms.length > 0) { // 验证返回的roles是否是一个非空数组
-          commit('SET_PERMS', data.perms)
-        }
-        const { name, nick_name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_NICKNAME', nick_name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+ // 获取用户信息
+ getInfo({ commit, state }) {
+  return new Promise((resolve, reject) => {
+    getInfo(state.token).then(response => {
+      const data = response.data
+      if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+        commit('SET_ROLES', data.roles)
+      } else {
+        reject('getInfo: roles must be a non-null array !')
+      }
+      // if (data.ticket_work_perm && data.ticket_work_perm.length > 0) { // 验证返回的roles是否是一个非空数组
+      //   commit('SET_WORK', data.ticket_work_perm)
+      // }
+      commit('SET_NAME', data.name)
+      commit('SET_AVATAR', data.avatar)
+      resolve(response)
+    }).catch(error => {
+      reject(error)
     })
-  },
+  })
+},
 
   // user logout
   logout({ commit, state }) {
@@ -80,7 +82,14 @@ const actions = {
       })
     })
   },
-
+  // 前端 登出
+  FedLogOut({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      removeToken()
+      resolve()
+    })
+  },
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {

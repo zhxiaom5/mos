@@ -19,5 +19,7 @@ func InitRoute(engine *gin.Engine) {
 	jenkinsAPI := engine.Group("/jenkins")
 	{
 		jenkinsAPI.POST("/JenkinsPost", JenkinsPost)
+		jenkinsAPI.GET("/JenkinsJobList", JenkinsJobList)
+
 	}
 }
