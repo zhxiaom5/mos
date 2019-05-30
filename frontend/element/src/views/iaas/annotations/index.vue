@@ -108,11 +108,7 @@
               prop="build_status" />  
             <el-table-column
               label="主机"
-              prop="hosts">
-              <template slot-scope="scope">
-                <span v-for="tags in scope.row.tag" :key="tags+scope.$index" class="el-tag el-tag--success">{{ tags }}</span>
-              </template>
-            </el-table-column>
+              prop="hosts" />
             <el-table-column
               label="标签时间"
               prop="create_time"

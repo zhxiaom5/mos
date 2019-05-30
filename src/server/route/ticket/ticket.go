@@ -74,7 +74,7 @@ func TicketSourceList(ctx *gin.Context) {
 		dbQuery = dbQuery.Where("name LIKE ?", fmt.Sprintf("%%%s%%", typeName))
 	}
 
-	if err := dbQuery.Limit(pageSize).Offset((page - 1) * pageSize).Order("id desc").Find(&querySet).Count(&total).Error; err != nil {
+	if err := dbQuery.Limit(pageSize).Offset((page - 1) * pageSize).Order("id desc").Find(&querySet).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":    e.ERROR,
 			"message": "查询失败 " + err.Error(),
@@ -88,6 +88,7 @@ func TicketSourceList(ctx *gin.Context) {
 		g.CreateTime = comfunc.FormatTs(r.CreatedAt.Unix())
 		res = append(res, g)
 	}
+	dbQuery.Count(&total)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":       e.SUCCESS,
 		"message":    "success",
@@ -243,7 +244,7 @@ func TicketTypeList(ctx *gin.Context) {
 		dbQuery = dbQuery.Where("name LIKE ?", fmt.Sprintf("%%%s%%", typeName))
 	}
 
-	if err := dbQuery.Limit(pageSize).Offset((page - 1) * pageSize).Order("id desc").Find(&querySet).Count(&total).Error; err != nil {
+	if err := dbQuery.Limit(pageSize).Offset((page - 1) * pageSize).Order("id desc").Find(&querySet).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":    e.ERROR,
 			"message": "查询失败 " + err.Error(),
@@ -257,6 +258,7 @@ func TicketTypeList(ctx *gin.Context) {
 		g.CreateTime = comfunc.FormatTs(r.CreatedAt.Unix())
 		res = append(res, g)
 	}
+	dbQuery.Count(&total)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":       e.SUCCESS,
 		"message":    "success",
@@ -560,7 +562,7 @@ func TicketList(ctx *gin.Context) {
 	if req.EndTime > 0 {
 		queryDb = queryDb.Where("created_at <= ?", comfunc.FormatTs(req.EndTime/1e3))
 	}
-	if err := queryDb.Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&querySet).Count(&total).Error; err != nil {
+	if err := queryDb.Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&querySet).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":    e.ERROR,
 			"message": "get user query error, " + err.Error(),
@@ -600,6 +602,7 @@ func TicketList(ctx *gin.Context) {
 		}
 		res = append(res, t)
 	}
+	queryDb.Count(&total)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":       20000,
 		"message":    "success",

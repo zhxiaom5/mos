@@ -44,7 +44,7 @@ func AnnotationList(ctx *gin.Context) {
 		// 根据username模糊查询，可以将gorm链接添加条件后，赋值覆盖自身，得到不定条件的链式查询效果
 		queryDb = queryDb.Where("text LIKE ?", fmt.Sprintf("%%%s%%", search))
 	}
-	if err := queryDb.Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&aList).Count(&total).Error; err != nil {
+	if err := queryDb.Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&aList).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":    e.ERROR,
 			"message": "get query error, " + err.Error(),
@@ -68,6 +68,7 @@ func AnnotationList(ctx *gin.Context) {
 			EndTime:    comfunc.FormatTs(r.EndTime),
 		})
 	}
+	queryDb.Count(&total)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":       e.SUCCESS,
 		"message":    e.SUCCESS_MSG,

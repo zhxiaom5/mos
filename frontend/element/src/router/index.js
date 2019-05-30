@@ -62,7 +62,7 @@ export const constantRoutes = [
       path: 'annotationTable',
       name: 'AnnotationTable',
       component: () => import('@/views/iaas/annotations/index'),
-      meta: { title: 'Annotation', icon: 'bug-report', roles: ['ADMIN'] }
+      meta: { title: '变更事件汇总', icon: 'bug-report', roles: ['ADMIN'] }
     }]
   },
   {
